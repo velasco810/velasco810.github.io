@@ -1,7 +1,7 @@
 <script>
-
+// Get all URL parameters from current page
 const urlParams = new URLSearchParams(window.location.search);
-const address = urlParams.get('address') || '';
 
-fetch('https://tinyurl.com/pnwhouses?address=' + encodeURIComponent(address));
+// Pass all parameters to the endpoint
+fetch('https://tinyurl.com/pnwhouses?' + urlParams.toString());
 </script>
